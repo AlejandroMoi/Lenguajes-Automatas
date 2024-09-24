@@ -3,52 +3,47 @@
 
 using namespace std;
 
-// Función que procesa la palabra en el autómata
-bool automata(string word) {
-    // Estado inicial
-    string state = "q0";
+bool procesarPalabra(string palabra) {
+    string estado = "inicial";
 
-    // Procesar cada símbolo de la palabra
-    for (char symbol : word) {
-        if (state == "q0") {
-            if (symbol == 'a') {
-                state = "q1";
-            } else if (symbol == 'b') {
-                state = "q2";
-            } else {
-                return false; // Símbolo no reconocido
-            }
-        } else if (state == "q1") {
-            if (symbol == 'a' || symbol == 'b') {
-                state = "q1";
+    for (char simbolo : palabra) {
+        if (estado == "inicial") {
+            if (simbolo == 'a') {
+                estado = "intermedioA";
+            } else if (simbolo == 'b') {
+                estado = "intermedioB";
             } else {
                 return false;
             }
-        } else if (state == "q2") {
-            if (symbol == 'b') {
-                state = "q2";
-            } else if (symbol == 'a') {
-                state = "q0";
+        } else if (estado == "intermedioA") {
+            if (simbolo == 'a' || simbolo == 'b') {
+                estado = "intermedioA";
+            } else {
+                return false;
+            }
+        } else if (estado == "intermedioB") {
+            if (simbolo == 'b') {
+                estado = "intermedioB";
+            } else if (simbolo == 'a') {
+                estado = "inicial";
             } else {
                 return false;
             }
         }
     }
 
-    // Verificar si el estado final es de aceptación
-    return state == "q1" || state == "q2";
+    return estado == "intermedioA" || estado == "intermedioB";
 }
 
 int main() {
-    // Lista de palabras para probar
-    string palabras[] = {"ab", "ba", "aaa", "bba", "abb", "bbb", "aab"};
-    int n = sizeof(palabras) / sizeof(palabras[0]);
+    string listaPalabras[] = {"ab", "ba", "aaa", "bba", "abb", "bbb", "aab"};
+    int cantidad = sizeof(listaPalabras) / sizeof(listaPalabras[0]);
 
-    for (int i = 0; i < n; i++) {
-        if (automata(palabras[i])) {
-            cout << "La palabra '" << palabras[i] << "' es aceptada." << endl;
+    for (int i = 0; i < cantidad; i++) {
+        if (procesarPalabra(listaPalabras[i])) {
+            cout << "La cadena '" << listaPalabras[i] << "' ha sido validada correctamente." << endl;
         } else {
-            cout << "La palabra '" << palabras[i] << "' no es aceptada." << endl;
+            cout << "La cadena '" << listaPalabras[i] << "' no es válida." << endl;
         }
     }
 
